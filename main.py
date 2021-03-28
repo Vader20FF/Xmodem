@@ -41,7 +41,7 @@ def main():
                 wybranyPort = int(input("Twój wybór: "))
         print()
         print("Z jakiego algorytmu obliczania sumy kontrolnej chcesz skorzystać?\n"
-              "1. Domyślnego\n"
+              "1. Domyślny algorytm protokołu Xmodem \n"
               "2. CRC16")
         algorytmSumy = int(input("Twój wybór: "))
         while algorytmSumy not in [1, 2]:
