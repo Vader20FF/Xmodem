@@ -1,18 +1,15 @@
-def CRC16(file_buffer):
-    tmp = 0
-    val = 0x18005 << 15
+def crc16(data: bytes, poly=0x8408):
+    data = bytearray(data)
+    crc = 0xFFFF
+    for b in data:
+        cur_byte = 0xFF & b
+        for _ in range(0, 8):
+            if (crc & 0x0001) ^ (cur_byte & 0x0001):
+                crc = (crc >> 1) ^ poly
+            else:
+                crc >>= 1
+            cur_byte >>= 1
+    crc = (~crc & 0xFFFF)
+    crc = (crc << 8) | ((crc >> 8) & 0xFF)
 
-    for i in range(0, 3):
-        tmp = tmp * 256 + file_buffer[i]
-
-    tmp *= 256
-
-    for i in range(3, 134):
-        if i < 128:
-            tmp += file_buffer[i]
-        for j in range(0, 8):
-            if tmp & 1 << 31:
-                tmp ^= val
-            tmp <<= 1
-
-    return tmp >> 16
+    return crc & 0xFFFF
