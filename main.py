@@ -5,6 +5,7 @@ from communication import *
 
 
 def main():
+    coms = inicialize_ports()
     while True:
         print("XMODEM Python")
         print("Lukasz Janiszewski, Jakub Muszynski")
@@ -19,16 +20,16 @@ def main():
         if wybor_uzytkownika == 2:
             sys.exit()
         print()
-        print("Wybierz tryb pracy:\n"
-              "1. Wysyłanie\n"
-              "2. Odbieranie")
-        tryb_pracy = int(input("Twój wybór: "))
-        while tryb_pracy not in [1, 2]:
-            print("Wybrano zla opcje!")
-            tryb_pracy = int(input("Twój wybór: "))
-        print()
+        # print("Wybierz tryb pracy:\n"
+        #       "1. Wysyłanie\n"
+        #       "2. Odbieranie")
+        # tryb_pracy = int(input("Twój wybór: "))
+        # while tryb_pracy not in [1, 2]:
+        #     print("Wybrano zla opcje!")
+        #     tryb_pracy = int(input("Twój wybór: "))
+        # print()
         connected_ports = available_ports()
-        print("Wybierz port:")
+        print("Wybierz port nadawcy:")
         iteration = 1
         if not connected_ports:
             print("BRAK DOSTEPNYCH PORTOW!")
@@ -40,6 +41,10 @@ def main():
             while wybrany_port not in range(1, iteration-1):
                 print("Wybrano zla opcje!")
                 wybrany_port = int(input("Twój wybór: "))
+            if wybrany_port == 1:
+                port_nadawcy, port_odbiorcy = coms
+            else:
+                port_odbiorcy, port_nadawcy = coms
         print()
         print("Z jakiego algorytmu obliczania sumy kontrolnej chcesz skorzystać?\n"
               "1. Domyślny algorytm protokołu Xmodem \n"
@@ -56,10 +61,9 @@ def main():
         print("Wpisz wiadomosc jaka chcesz wyslac:")
         wiadomosc = str(input())
         bytesText = string_to_bytes(wiadomosc)
-        print()
-        print(prepare_packets(bytesText, crc))
 
         # Wywołanie funkcji wysylania i odbierania
+        start_communication(bytesText, crc, port_nadawcy, port_odbiorcy)
 
         print()
         print()
