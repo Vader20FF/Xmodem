@@ -1,5 +1,5 @@
 from checksums import calculate_default_checksum, calculate_crc16
-from string_and_bytes import bytes_to_string
+from string_and_bytes import *
 
 
 def prepare_packets(message, crc):
@@ -26,7 +26,8 @@ def prepare_packets(message, crc):
 
 
 def start_communication(message, crc, sender_port, receiver_port):
-    packets = prepare_packets(message, crc)
+    bytesText = string_to_bytes(message)
+    packets = prepare_packets(bytesText, crc)
     if crc:
         # C
         receiver_port.write(bytearray.fromhex("43"))
