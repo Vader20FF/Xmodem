@@ -6,11 +6,32 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 import gui
 
+ports = inicialize_ports()
+
 
 class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(ExampleApp, self).__init__(parent)
         self.setupUi(self)
+        self.clear_button.clicked.connect(self.clear_all)
+        self.exit_button.clicked.connect(self.close)
+        self.start_communication_button.clicked.connect(self.start_communication_button_method)
+
+    def clear_all(self):
+        self.message_text_field.clear()
+        self.sender_text_field.clear()
+        self.receiver_text_field.clear()
+
+    def start_communication_button_method(self):
+        input_text = self.message_text_field.toPlainText()
+        crc = self.crc_checksum_check.isChecked
+        if self.COM1_port_check.isChecked:
+            port_nadawcy, port_odbiorcy = ports
+        else:
+            port_odbiorcy, port_nadawcy = ports
+        sender_log, receiver_log = start_communication(input_text, crc, port_nadawcy, port_odbiorcy)
+        self.sender_text_field.setText(sender_log)
+        self.receiver_text_field.setText(receiver_log)
 
 
 def main():
@@ -19,62 +40,6 @@ def main():
     form = ExampleApp()
     form.show()
     app.exec_()
-    # while True:
-    #     print("XMODEM Python")
-    #     print("Lukasz Janiszewski, Jakub Muszynski")
-    #     print()
-    #     print("Wybierz opcję:\n"
-    #           "1. Rozpocznij program\n"
-    #           "2. Zakończ program")
-    #     wybor_uzytkownika = int(input("Twój wybór: "))
-    #     while wybor_uzytkownika not in [1, 2]:
-    #         print("Wybrano zla opcje!")
-    #         wybor_uzytkownika = int(input("Twój wybór: "))
-    #     if wybor_uzytkownika == 2:
-    #         sys.exit()
-    #     print()
-    #     connected_ports = available_ports()
-    #     print("Wybierz port nadawcy:")
-    #     iteration = 1
-    #     if not connected_ports:
-    #         print("BRAK DOSTEPNYCH PORTOW!")
-    #     else:
-    #         for connected_port in connected_ports:
-    #             print(str(iteration) + ". " + str(connected_port))
-    #             iteration += 1
-    #         wybrany_port = int(input("Twój wybór: "))
-    #         while wybrany_port not in range(1, iteration):
-    #             print("Wybrano zla opcje!")
-    #             wybrany_port = int(input("Twój wybór: "))
-    #         if wybrany_port == 1:
-    #             port_nadawcy, port_odbiorcy = coms
-    #         else:
-    #             port_odbiorcy, port_nadawcy = coms
-    #     print()
-    #     print("Z jakiego algorytmu obliczania sumy kontrolnej chcesz skorzystać?\n"
-    #           "1. Domyślny algorytm protokołu Xmodem \n"
-    #           "2. CRC16")
-    #     algorytm_sumy = int(input("Twój wybór: "))
-    #     while algorytm_sumy not in [1, 2]:
-    #         print("Wybrano zla opcje!")
-    #         algorytm_sumy = int(input("Twój wybór: "))
-    #     if algorytm_sumy == 2:
-    #         crc = True
-    #     else:
-    #         crc = False
-    #     print()
-    #     print("Wpisz wiadomosc jaka chcesz wyslac:")
-    #     wiadomosc = str(input())
-    #     bytesText = string_to_bytes(wiadomosc)
-
-        # Rozpoczecie komunikacji
-        # start_communication(bytesText, crc, port_nadawcy, port_odbiorcy)
-
-        # port_nadawcy.close()
-        # port_odbiorcy.close()
-
-    print()
-    print()
 
 
 if __name__ == '__main__':

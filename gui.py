@@ -1,7 +1,4 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from string_and_bytes import *
-from communication import start_communication
-from COM_ports import inicialize_ports
 
 
 class Ui_MainWindow(object):
@@ -37,7 +34,7 @@ class Ui_MainWindow(object):
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(60, 40, 551, 161))
         self.label_4.setText("")
-        self.label_4.setPixmap(QtGui.QPixmap("//qnap-ts-473/Multimedia/BACKUP/UCZELNIA/SEMESTR 4/Telekomunikacja i przetwarzanie sygnałów/headIcon.png"))
+        self.label_4.setPixmap(QtGui.QPixmap("resources/headIcon.png"))
         self.label_4.setObjectName("label_4")
 
         self.sender_text_field = QtWidgets.QTextEdit(self.centralwidget)
@@ -57,8 +54,7 @@ class Ui_MainWindow(object):
         self.start_communication_button = QtWidgets.QPushButton(self.centralwidget)
         self.start_communication_button.setGeometry(QtCore.QRect(550, 660, 191, 71))
         self.start_communication_button.setObjectName("start_communication_button")
-        # self.start_communication_button.clicked.connect(start_communication(str(self.message_text_field.get_text),
-        #                                                                     self.crc_checksum_check.isChecked, ))
+
 
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(170, 440, 291, 51))
@@ -173,8 +169,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Łukasz Janiszewski, Jakub Muszyński"))
         self.label_5.setText(_translate("MainWindow", "Wybierz port nadawcy:"))
         self.start_communication_button.setText(_translate("MainWindow", "Rozpocznij komunikację"))
-        self.label_6.setText(_translate("MainWindow", "Dane portu nadawcy:"))
-        self.label_7.setText(_translate("MainWindow", "Dane portu odbiorcy:"))
+        self.label_6.setText(_translate("MainWindow", "Logi portu nadawcy:"))
+        self.label_7.setText(_translate("MainWindow", "Logi portu odbiorcy:"))
         self.label_8.setText(_translate("MainWindow", "Wpisz wiadomość, jaką chcesz przesłać:"))
         self.label_9.setText(_translate("MainWindow", "Wybierz algorytm sumy kontrolnej:"))
         self.exit_button.setText(_translate("MainWindow", "Wyjdź"))
@@ -183,6 +179,3 @@ class Ui_MainWindow(object):
         self.COM2_port_check.setText(_translate("MainWindow", "COM2"))
         self.default_checksum_check.setText(_translate("MainWindow", "Domyślny dla protokołu XMODEM"))
         self.crc_checksum_check.setText(_translate("MainWindow", "CRC16"))
-
-    def clicked(self, MainWindow):
-        print("HELLO THERE")
