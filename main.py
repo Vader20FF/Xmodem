@@ -20,14 +20,6 @@ def main():
         if wybor_uzytkownika == 2:
             sys.exit()
         print()
-        # print("Wybierz tryb pracy:\n"
-        #       "1. Wysyłanie\n"
-        #       "2. Odbieranie")
-        # tryb_pracy = int(input("Twój wybór: "))
-        # while tryb_pracy not in [1, 2]:
-        #     print("Wybrano zla opcje!")
-        #     tryb_pracy = int(input("Twój wybór: "))
-        # print()
         connected_ports = available_ports()
         print("Wybierz port nadawcy:")
         iteration = 1
@@ -38,7 +30,7 @@ def main():
                 print(str(iteration) + ". " + str(connected_port))
                 iteration += 1
             wybrany_port = int(input("Twój wybór: "))
-            while wybrany_port not in range(1, iteration-1):
+            while wybrany_port not in range(1, iteration):
                 print("Wybrano zla opcje!")
                 wybrany_port = int(input("Twój wybór: "))
             if wybrany_port == 1:
@@ -62,8 +54,11 @@ def main():
         wiadomosc = str(input())
         bytesText = string_to_bytes(wiadomosc)
 
-        # Wywołanie funkcji wysylania i odbierania
+        # Rozpoczecie komunikacji
         start_communication(bytesText, crc, port_nadawcy, port_odbiorcy)
+
+        # port_nadawcy.close()
+        # port_odbiorcy.close()
 
         print()
         print()
