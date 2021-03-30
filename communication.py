@@ -1,4 +1,5 @@
 from checksums import calculate_default_checksum, calculate_crc16
+from string_and_bytes import bytes_to_string
 
 
 def prepare_packets(message, crc):
@@ -12,8 +13,8 @@ def prepare_packets(message, crc):
         packet_number_bytes = bytearray(packet_number.to_bytes(2, 'big'))
         data_bytes = bytearray(data_packet)
         if len(data_bytes) != 128:
-            for i in range(len(data_bytes), 128):
-                data_bytes = data_bytes + bytearray(int(0).to_bytes(128-len(data_bytes), 'big'))
+            # data_bytes = data_bytes + bytearray(b'!EOP!')
+            data_bytes = data_bytes + bytearray(int(0).to_bytes(128-len(data_bytes), 'big'))
         if crc:
             checksum_bytes = bytearray(calculate_crc16(data_bytes).to_bytes(2, 'big'))
         else:
@@ -35,6 +36,7 @@ def start_communication(message, crc, sender_port, receiver_port):
     received_hex = bytes.hex(sender_port.readline())
     # print("RECEIVED FIRST:", received)
     if received_hex == "43" or received_hex == "15":
+        received_data = ""
         for send_packet in packets:
             print("WYSLANE:")
             print(bytes(send_packet))
@@ -70,6 +72,9 @@ def start_communication(message, crc, sender_port, receiver_port):
                         received_hex = bytes.hex(sender_port.readline())
             print("OTRZYMANE:")
             print(bytes(received_packet))
+            received_data = received_data + bytes_to_string(received_packet[3:131])
+            print("FINAL:")
+            print(received_data)
         # END OF TRANSMISSION
         sender_port.write(bytes(bytearray.fromhex("04")))
         received_hex = bytes.hex(receiver_port.readline())
