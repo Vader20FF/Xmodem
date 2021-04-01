@@ -43,35 +43,22 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         self.file_to_receive_path_text_field.clear()
         self.operation_status_text_field.clear()
 
-    # def start_communication_button_method(self):
-    #     input_text = self.message_text_field.toPlainText()
-    #     crc = self.crc_checksum_check.isChecked
-    #     if self.COM1_port_check.isChecked:
-    #         port_nadawcy, port_odbiorcy = ports
-    #     else:
-    #         port_odbiorcy, port_nadawcy = ports
-    #     sender_log, receiver_log = start_communication(input_text, crc, port_nadawcy, port_odbiorcy)
-    #     self.sender_text_field.setText(sender_log)
-    #     self.receiver_text_field.setText(receiver_log)
-
     def send_button_method(self):
-        # if not self.send_file_radio_button.isChecked:
-        #     return None
-        # com1 = self.com1_radio_button.isChecked
-        # com2 = self.com2_radio_button.isChecked
-        # crc = self.crc16_algorithm_radio_button.isChecked
-        # data_to_be_sent = self.get_data_from_choosen_file(file_to_send_path)
-        #
-        # self.operation_status_text_field.setPlainText("Operacja zakończona pomyślnie!")
-        with open(file_to_send_path, 'rb') as stream:
-            modem.send(stream, retry=8)
+        if not self.send_file_radio_button.isChecked:
+            return None
+        crc = self.crc16_algorithm_radio_button.isChecked
+        data_to_be_sent = self.get_data_from_choosen_file(file_to_send_path)
+        send(data_to_be_sent, crc, port)
+        # with open(file_to_send_path, 'rb') as stream:
+        #     modem.send(stream, retry=8)
+        self.operation_status_text_field.setPlainText("Operacja wysyłania zakończona pomyślnie!")
 
     def receive_button_method(self):
         if not self.receive_file_radio_button.isChecked:
             return None
         crc = self.crc16_algorithm_radio_button.isChecked
         received_data = receive(crc, port)
-        self.operation_status_text_field.setPlainText("Operacja zakończona pomyślnie!")
+        self.operation_status_text_field.setPlainText("Operacja odbierania zakończona pomyślnie!")
         self.save_received_data_to_choosen_file(received_data, file_to_save_path)
 
 
@@ -99,7 +86,7 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
 
     def get_data_from_choosen_file(self, file_path):
         with open(file_path, 'rb') as file_data:
-            return file_data
+            return file_data.read()
 
     def save_received_data_to_choosen_file(self, received_data, file_path):
         with open(file_path, 'wb') as file_to_save:
