@@ -44,13 +44,7 @@ def prepare_packets(message, crc):
         if crc:
             checksum_bytes = calculate_crc16(data_bytes).to_bytes(2, 'big')
         else:
-            # default checksum
-            sum = 0
-            for byte in data_packet:
-                sum = sum + byte
-            sum %= 256
-            checksum_bytes = sum
-            # checksum_bytes = calculate_default_checksum(data_bytes).to_bytes(1, 'big')
+            checksum_bytes = calculate_default_checksum(data_bytes).to_bytes(1, 'big')
         data_bytes = bytes(data_bytes)
         packet_bytes = start_bytes + packet_number_byte_one + packet_number_byte_two + data_bytes + checksum_bytes
         packets.append(packet_bytes)
