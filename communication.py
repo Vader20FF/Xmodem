@@ -93,36 +93,52 @@ def receive(crc, receiver_port):
     if crc:
         # C
         receiver_port.write(bytearray.fromhex("43"))
+        received_packet = bytearray(receiver_port.read(133))
+        while received_packet != bytearray.fromhex("04"):
+            checksum_bytes = bytearray(calculate_crc16(received_packet[3:131]).to_bytes(2, 'big'))
+            if checksum_bytes == received_packet[131:133]:
+                # ACK
+                receiver_port.write(bytearray.fromhex("06"))
+                received_bytes = received_bytes + received_packet[3:131]
+            else:
+                # NAK
+                receiver_port.write(bytearray.fromhex("15"))
+                while checksum_bytes != received_packet[131:133]:
+                    received_packet = receiver_port.read(133)
+                    checksum_bytes = bytearray(calculate_crc16(received_packet[3:131]).to_bytes(2, 'big'))
+                    if checksum_bytes == received_packet[131:133]:
+                        # ACK
+                        receiver_port.write(bytearray.fromhex("06"))
+                        received_bytes = received_bytes + received_packet[3:131]
+                        break
+                    else:
+                        receiver_port.write(bytearray.fromhex("15"))
+            received_packet = bytearray(receiver_port.read(133))
+        receiver_port.write(bytearray.fromhex("06"))
+        return received_bytes
     else:
         # NAK
         receiver_port.write(bytearray.fromhex("15"))
-    received_packet = bytearray(receiver_port.read(133))
-    while received_packet != bytearray.fromhex("04"):
-        if crc:
-            checksum_bytes = bytearray(calculate_crc16(received_packet[3:131]).to_bytes(2, 'big'))
-        else:
-            checksum_bytes = bytearray(calculate_default_checksum(received_packet[3:131]).to_bytes(2, 'big'))
-        if checksum_bytes == received_packet[131:133]:
-            # ACK
-            receiver_port.write(bytearray.fromhex("06"))
-            received_bytes = received_bytes + received_packet[3:131]
-        else:
-            # NAK
-            receiver_port.write(bytearray.fromhex("15"))
-            while checksum_bytes != received_packet[131:133]:
-                received_packet = receiver_port.read(133)
-                if crc:
-                    checksum_bytes = bytearray(calculate_crc16(received_packet[3:131]).to_bytes(2, 'big'))
-                else:
-                    checksum_bytes = bytearray(
-                        calculate_default_checksum(received_packet[3:131]).to_bytes(2, 'big'))
-                if checksum_bytes == received_packet[131:133]:
-                    # ACK
-                    receiver_port.write(bytearray.fromhex("06"))
-                    received_bytes = received_bytes + received_packet[3:131]
-                    break
-                else:
-                    receiver_port.write(bytearray.fromhex("15"))
-        received_packet = bytearray(receiver_port.read(133))
-    receiver_port.write(bytearray.fromhex("06"))
-    return received_bytes
+        received_packet = bytearray(receiver_port.read(132))
+        while received_packet != bytearray.fromhex("04"):
+            checksum_bytes = bytearray(calculate_default_checksum(received_packet[3:131]).to_bytes(1, 'big'))
+            if checksum_bytes == received_packet[131:132]:
+                # ACK
+                receiver_port.write(bytearray.fromhex("06"))
+                received_bytes = received_bytes + received_packet[3:131]
+            else:
+                # NAK
+                receiver_port.write(bytearray.fromhex("15"))
+                while checksum_bytes != received_packet[131:133]:
+                    received_packet = receiver_port.read(132)
+                    checksum_bytes = bytearray(calculate_default_checksum(received_packet[3:131]).to_bytes(1, 'big'))
+                    if checksum_bytes == received_packet[131:132]:
+                        # ACK
+                        receiver_port.write(bytearray.fromhex("06"))
+                        received_bytes = received_bytes + received_packet[3:131]
+                        break
+                    else:
+                        receiver_port.write(bytearray.fromhex("15"))
+            received_packet = bytearray(receiver_port.read(132))
+        receiver_port.write(bytearray.fromhex("06"))
+        return received_bytes
