@@ -1,31 +1,5 @@
 from checksums import calculate_default_checksum, calculate_crc16
-from string_and_bytes import *
 
-
-# def prepare_packets(message, crc):
-#     print("Przechodze do tworzenia pakietow")
-#     data_to_packets = [message[i:i+128] for i in range(0, len(message), 128)]
-#     packets = []
-#     packet_number = 0
-#     for data_packet in data_to_packets:
-#         if packet_number == 256:
-#             packet_number = 0
-#         start_bytes = bytearray(b'\x01')
-#         packet_number_bytes = bytearray(packet_number.to_bytes(2, 'big'))
-#         data_bytes = bytearray(data_packet)
-#         if len(data_bytes) != 128:
-#             # data_bytes = data_bytes + bytearray(b'!EOP!')
-#             data_bytes = data_bytes + bytearray(int(0).to_bytes(128-len(data_bytes), 'big'))
-#         if crc:
-#             checksum_bytes = bytearray(calculate_crc16(data_bytes).to_bytes(2, 'big'))
-#         else:
-#             checksum_bytes = bytearray(calculate_default_checksum(data_bytes).to_bytes(2, 'big'))
-#         packet_bytes = start_bytes + packet_number_bytes + data_bytes + checksum_bytes
-#         packets.append(packet_bytes)
-#         packet_number += 1
-#     print("Ukonczylem tworzenie pakietow")
-#     print(*packets)
-#     return packets
 
 def prepare_packets(message, crc):
     print("Przechodze do tworzenia pakietow")
