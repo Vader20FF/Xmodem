@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QApplication, QFileDialog
 import gui
 
 port = inicialize_ports()
-file_to_save_path = None
-file_to_send_path = None
+file_to_save_path = ""
+file_to_send_path = ""
 
 
 class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
@@ -41,6 +41,8 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         received_data = receive(crc, port)
         self.operation_status_text_field.setPlainText("Operacja odbierania zakończona pomyślnie!")
         self.save_received_data_to_choosen_file(received_data, file_to_save_path)
+        # if file_to_save_path.endswith(".txt"):
+        #     self.remove_added_signs_from_file(file_to_save_path)
 
     def choose_file_to_send_path_button_method(self):
         global file_to_send_path
@@ -71,6 +73,15 @@ class ExampleApp(QtWidgets.QMainWindow, gui.Ui_MainWindow):
     def save_received_data_to_choosen_file(self, received_data, file_path):
         with open(file_path, 'wb') as file_to_save:
             file_to_save.write(received_data)
+
+    def remove_added_signs_from_file(self, file_path):
+        with open(file_path, 'r') as file_to_edit, open(file_path, 'w') as file_to_save:
+            data = file_to_edit.read()
+            for sign in data:
+                if not sign.isnumeric() and not sign.isdecimal() and not sign.isascii() and not sign.isalpha():
+                    data = data.replace(sign, '')
+            file_to_save.write(data)
+
 
 def main():
 
