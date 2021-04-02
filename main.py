@@ -4,7 +4,6 @@ from communication import *
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog
 import gui
-import re
 
 port = inicialize_ports()
 file_to_save_path = ""
