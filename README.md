@@ -15,7 +15,9 @@ Xmodem protocol project in Python with GUI, using default checksum and(or) CRC16
 ## Technologies
 * Python
 * Pycharm
+* Pyserial module
 * PyQt5
+* HyperACCESS
 
 
 ## Status
@@ -23,25 +25,25 @@ Finished
 
 
 ## Requirements
-NONE
+* newest version of python environment
+* pyserial
+* HyperACCESS
+* Virtual Serial Port Tool
 
 
 ## Description
-Problemem zadania było napisanie programu implementującego protokół Xmodem w wersjach z domyślną sumą kontrolną i CRC16.
-Zaimplementowanego przez nas algorytmu używa się przy pomocy interfejsu graficznego, który umożliwia wybranie pliku, na
-którym chcemy operować. Do działania na portach użyliśmy programu Virtual Serial Port Tools, który umożliwił tworzenie
-wirtualnych portów, wykorzystywanych dalej w programie. Działanie protokołu sprawdziliśmy przy użyciu programu HyperACCESS,
-czyli nowszej wersji HyperTerminala. Użytkownik na samym początku wybiera czy chce wysłać czy odebrać wiadomość, port z
-dostępnych (COM1 i COM2), następnie algorytm obliczania sumy kontrolnej i na samym końcu podaje plik, który chce wysłać lub
-plik do którego chce zapisać odebraną zawartość, w zależności od wybranej pierwszej opcji.
-Algorytm działa następująco:
-1. W zależności od wybranego algorytmu odbiorca wysyła do nadawcy znak „C” (gdy został wybrany CRC16) lub flagę „NAK”
-(gdy został wybrany domyślny algorytm protokołu Xmodem)
-2. Nadawca zaczyna następnie wysyłać pakiety danych złożone z 133 bajtów (132 bajtów w przypadku domyślnego
-algorytmu sumy kontrolnej) (1. Bajt – nagłówek, 2. i 3. Bajt – numer pakietu, bajty 4-131 – przesyłane dane, bajty 132-
-133 – obliczona suma kontrolna)
-3. Za każdym razem odbiorca po odebraniu pakietu oblicza sumę kontrolną na nowo, porównuje ją z sumą kontrolną zawartą
-w pakiecie i wysyła flagę „ACK” gdy obie sumy są równe lub „NAK” gdy nie są równe. W pierwszym przypadku nadawca
-wysyła kolejny pakiet, w drugim przypadku nadawca jeszcze raz przesyła ostatni pakiet
-4. Gdy nadawca nie ma już pakietów do wysłania wysyła flagę „EOT”, co oznacza, że nie ma już żadnych danych do wysłania.
-Odbiorca odsyła następnie flagę „ACK”. Transmisja jest w tym momencie zakończona.
+The task was to write an app implementing Xmodem protocol both with version with default checksum and the CRC16. 
+Our program is used with a help of GUI, in which the user is able to choose the file on which we want to operate.
+For virtual COM ports creation we used Virtual Serial Port Tool. The correctness of pure implementation of protocol we checked with help of HyperACCESS program which is the newer version of HyperTerminal.
+
+At the beginning user chooses:
+* if he want to send or receive message, 
+* available port (COM1 and COM2)
+* default checksum or CRC16
+* file which he would like to send (or name of the file which he would like to receive the data into)
+
+The algorithm works in the following way:
+1. Depending on the checksum, that has been chosen, the receiver sends "C" sign (CRC16) or "NAK" flag (default checksum)
+2. Sender starts to send data packets consisting of 133 bytes (132 bytes if default checksum was chose). 1 byte is header, 2 and 3 bytes are packet number, bytes 4-131 are the data which is being send, bytes 132-133 are the calculated checksum
+3. Every time the packet is received, the receiver calculated checksum and compares it with the checksum included in the packet. If both checksums are equal he sends "ACK" flag, if they are not the "NAK" flag is sent. In the first case, the sender continues data transfer. Otherwise the sender asks for the last packet to be sent again.
+4. If sender do not have any packets to be send left he sends "EOT" flag. The receiver responds with "ACK" flag and the transmission is closed in this moment.
