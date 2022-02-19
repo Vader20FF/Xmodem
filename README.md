@@ -43,5 +43,5 @@ algorytmu sumy kontrolnej) (1. Bajt – nagłówek, 2. i 3. Bajt – numer pakie
 3. Za każdym razem odbiorca po odebraniu pakietu oblicza sumę kontrolną na nowo, porównuje ją z sumą kontrolną zawartą
 w pakiecie i wysyła flagę „ACK” gdy obie sumy są równe lub „NAK” gdy nie są równe. W pierwszym przypadku nadawca
 wysyła kolejny pakiet, w drugim przypadku nadawca jeszcze raz przesyła ostatni pakiet
-4. Gdy nadawca nie ma już pakietów do wysłania wysyła flagę „EOT”, co oznacza, że nie ma j
-
+4. Gdy nadawca nie ma już pakietów do wysłania wysyła flagę „EOT”, co oznacza, że nie ma już żadnych danych do wysłania.
+Odbiorca odsyła następnie flagę „ACK”. Transmisja jest w tym momencie zakończona.
